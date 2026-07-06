@@ -1,7 +1,8 @@
-import express, { Application, Request, Response } from 'express'
-import cors from 'cors'
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
 import config from './config';
-const app: Application = express()
+import { authRoute } from './modules/auth/auth.route';
+const app: Application = express();
 
 
 app.use(cors({
@@ -16,5 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req: Request, res: Response) => {
     res.send("Rent_Nest API is running, visit/health for status.");
 });
+
+app.use("/api/auth", authRoute);
 
 export default app;

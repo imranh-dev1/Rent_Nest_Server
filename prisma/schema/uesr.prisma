@@ -1,6 +1,6 @@
 model User {
-    id         String     @id @default(cuid())
-    name       String
+    id         String     @id @default(uuid())
+    name       String     @db.VarChar(255)
     email      String     @unique
     password   String
     phone      String?
@@ -14,4 +14,6 @@ model User {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@map("users")
 }
