@@ -3,6 +3,7 @@ import { asyncHandler } from "../../utils/asyncHandler";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import status from "http-status";
+import { setAuthCookies } from "../../utils/setAuthCookies";
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
     const payload = req.body;
@@ -20,20 +21,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const payload = req.body;
     const { accessToken, refreshToken, user } = await authService.loginUser(payload);
 
-    res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 60 * 60 * 48,
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
-
+    setAuthCookies(res, accessToken, refreshToken);
 
     sendResponse(res, {
         success: true,
@@ -43,8 +31,21 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
+const getMe = asyncHandler(async (req: Request, res: Response) => {
+    // const { id, name, email, role } = req.user;
+    // console.log(req.user)
+    const result = await authService.getMe(req.user!.id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: status.OK,
+        message: "User profile retrieved successfully....",
+        data: result
+    });
+});
 
 export const authController = {
     registerUser,
-    loginUser
+    loginUser,
+    getMe
 };
