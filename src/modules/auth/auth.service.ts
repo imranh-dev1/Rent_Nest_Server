@@ -1,17 +1,19 @@
-import { UserStatus } from "../../../generated/prisma/enums";
+import { Role, UserStatus } from "../../../generated/prisma/enums";
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import { ILoginUser, IRegisterUser, IUpdateProfile } from "./auth.interface";
 import bcrypt from "bcrypt";
 import { jwtUtils } from "../../utils/jwtService";
 import { SignOptions } from "jsonwebtoken";
+import status from "http-status";
+import AppError from "../../errors/AppError";
 
 const registerUser = async (payload: IRegisterUser) => {
     const { name, email, password, phone, role, profileImg } = payload;
 
-    if (role === "ADMIN") {
-        throw new Error("You are not allowed to register as an admin.");
-    }
+    if (role === Role.ADMIN) {
+        throw new AppError(status.FORBIDDEN, "You are not allowed to register as an admin.");
+    };
 
     const existingUser = await prisma.user.findUnique({
         where: {
@@ -20,7 +22,7 @@ const registerUser = async (payload: IRegisterUser) => {
     });
 
     if (existingUser) {
-        throw new Error("User already exists with this email.");
+        throw new AppError(status.CONFLICT, "User already exists with this email..");
     }
 
     const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
@@ -51,17 +53,17 @@ const loginUser = async (payload: ILoginUser) => {
     });
 
     if (!user) {
-        throw new Error("User not found.!");
+        throw new AppError(status.NOT_FOUND, "User not found.!");
     };
 
     if (user.status === UserStatus.BLOCKED) {
-        throw new Error("Your account has been blocked.!");
+        throw new AppError(status.FORBIDDEN, "Your account has been blocked.!");
     };
 
     const isPasswordMatched = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatched) {
-        throw new Error("Invalid email or password...!");
+        throw new AppError(status.UNAUTHORIZED, "Invalid email or password...!");
     };
 
     const jwtPayload = {

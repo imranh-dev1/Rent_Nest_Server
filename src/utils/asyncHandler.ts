@@ -7,12 +7,13 @@ export const asyncHandler = (fnu: RequestHandler): RequestHandler => {
             await fnu(req, res, next);
         } catch (error) {
             console.log(error);
-            res.status(status.INTERNAL_SERVER_ERROR).json({
-                success: false,
-                statusCode: status.INTERNAL_SERVER_ERROR,
-                message: "Failed to register user",
-                error: (error as Error).message
-            })
+            // res.status(status.INTERNAL_SERVER_ERROR).json({
+            //     success: false,
+            //     statusCode: status.INTERNAL_SERVER_ERROR,
+            //     message: "Failed to register user",
+            //     error: (error as Error).message
+            // });
+            next(error);
         }
     };
 };

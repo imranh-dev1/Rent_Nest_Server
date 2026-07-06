@@ -1,3 +1,5 @@
+import status from "http-status";
+import AppError from "../../errors/AppError";
 import { prisma } from "../../lib/prisma";
 import { ICreateCategory } from "./category.interface";
 
@@ -11,7 +13,7 @@ const createCategory = async (payload: ICreateCategory) => {
     });
 
     if (existingCategory) {
-        throw new Error("Category already exists.!");
+        throw new AppError(status.CONFLICT, "Category already exists.!");
     };
 
     const createdCategory = await prisma.category.create({
