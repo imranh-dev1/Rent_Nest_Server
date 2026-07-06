@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { categoryRoute } from './modules/category/category.route';
 import { notFound } from './middlewares/notFound';
 import { globalErrorHandler } from './errors/globalErrorHandler';
+import { propertyRoute } from './modules/property/property.route';
 
 const app: Application = express();
 
@@ -25,6 +26,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoute);
 app.use("/api/categories", categoryRoute);
+app.use("/api/properties", propertyRoute);
 
 
 app.use(notFound);
