@@ -3,11 +3,9 @@ import cors from 'cors';
 import config from './config';
 import { authRoute } from './modules/auth/auth.route';
 import cookieParser from 'cookie-parser';
-
+import { categoryRoute } from './modules/category/category.route';
 
 const app: Application = express();
-
-
 
 app.use(cors({
     origin: config.app_url,
@@ -24,5 +22,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoute);
+app.use("/api/categories", categoryRoute);
 
 export default app;

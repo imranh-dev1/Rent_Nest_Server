@@ -8,7 +8,7 @@ model User {
     status     UserStatus @default(ACTIVE)
     profileImg String?
 
-    // properties Property[]
+    properties Property[]
     // rentals    RentalRequest[]
     // reviews    Review[]
 
