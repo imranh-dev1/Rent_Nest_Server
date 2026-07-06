@@ -9,3 +9,8 @@ export interface IRegisterUser {
     profileImg?: string;
     role: Role;
 }
+
+export interface ILoginUser {
+    email: string;
+    password: string;
+}
