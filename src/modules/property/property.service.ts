@@ -1,6 +1,8 @@
+import status from "http-status";
 import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
-import { ICreateProperty, IPropertyQuery } from "./property.interface";
+import { ICreateProperty, IPropertyQuery, IUpdateProperty } from "./property.interface";
+import AppError from "../../errors/AppError";
 
 const createProperty = async (payload: ICreateProperty, landlordId: string) => {
 
@@ -145,12 +147,67 @@ const getPropertyById = async (propertyId: string) => {
             },
         },
     });
-    
+
     return property;
+};
+
+const updateProperty = async (payload: IUpdateProperty, propertyId: string, landlordId: string) => {
+
+    const existingProperty = await prisma.property.findUniqueOrThrow({
+        where: {
+            id: propertyId,
+        },
+    });
+
+    if (existingProperty.landlordId !== landlordId) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to update this property.");
+    }
+
+    const updatedProperty = await prisma.property.update({
+        where: {
+            id: propertyId,
+        },
+        data: payload,
+        include: {
+            category: true,
+            landlord: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+
+    return updatedProperty;
+};
+
+const deleteProperty = async (propertyId: string, landlordId: string) => {
+
+    const existingProperty = await prisma.property.findUniqueOrThrow({
+        where: {
+            id: propertyId,
+        },
+    });
+
+    if (existingProperty.landlordId !== landlordId) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to delete this property.");
+    }
+
+    await prisma.property.delete({
+        where: {
+            id: propertyId,
+        },
+    });
+
+    return null;
 };
 
 export const propertyService = {
     createProperty,
     getAllProperties,
-    getPropertyById
+    getPropertyById,
+    updateProperty,
+    deleteProperty
 };

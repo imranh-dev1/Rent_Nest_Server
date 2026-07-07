@@ -42,9 +42,37 @@ const getPropertyById = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
+const updateProperty = asyncHandler(async (req: Request, res: Response) => {
+    const payload = req.body;
+    const landlordId = req.user?.id;
+    const propertyId = req.params.id;
+    const result = await propertyService.updateProperty(payload, propertyId as string, landlordId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: status.CREATED,
+        message: "Property updated successfully....",
+        data: result
+    });
+});
+
+const deleteProperty = asyncHandler(async (req: Request, res: Response) => {
+    const landlordId = req.user?.id;
+    const propertyId = req.params.id;
+    const result = await propertyService.deleteProperty(propertyId as string, landlordId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: status.CREATED,
+        message: "Property deletd successfully....",
+        data: result
+    });
+})
 
 export const propertyController = {
     createProperty,
     getAllProperties,
-    getPropertyById
+    getPropertyById,
+    updateProperty,
+    deleteProperty
 };
