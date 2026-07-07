@@ -121,7 +121,36 @@ const getAllProperties = async (queries: IPropertyQuery) => {
     };
 };
 
+const getPropertyById = async (propertyId: string) => {
+    const property = await prisma.property.findUniqueOrThrow({
+        where: {
+            id: propertyId
+        },
+        include: {
+            category: {
+                select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                },
+            },
+            landlord: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    phone: true,
+                    profileImg: true,
+                },
+            },
+        },
+    });
+    
+    return property;
+};
+
 export const propertyService = {
     createProperty,
-    getAllProperties
+    getAllProperties,
+    getPropertyById
 };

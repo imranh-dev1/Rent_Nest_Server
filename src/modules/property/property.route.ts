@@ -9,5 +9,6 @@ const router = Router();
 
 router.post("/", auth(Role.LANDLORD), validateRequest(propertyValidation.createPropertySchema), propertyController.createProperty);
 router.get("/", propertyController.getAllProperties);
+router.get("/:id", propertyController.getPropertyById);
 
 export const propertyRoute = router;

@@ -30,7 +30,21 @@ const getAllProperties = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
+const getPropertyById = asyncHandler(async (req: Request, res: Response) => {
+    const propertyId = req.params.id;
+    const result = await propertyService.getPropertyById(propertyId as string);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: status.OK,
+        message: "Property retrieved successfully....",
+        data: result
+    });
+});
+
+
 export const propertyController = {
     createProperty,
-    getAllProperties
+    getAllProperties,
+    getPropertyById
 };
