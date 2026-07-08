@@ -1,5 +1,5 @@
 model Property {
-    id           String   @id @default(uuid())
+    id           String               @id @default(uuid())
     title        String
     description  String
     address      String
@@ -10,13 +10,14 @@ model Property {
     area         Int
     amenities    String[]
     images       String[]
-    availability PropertyAvailability  @default(AVAILABLE)
+    availability PropertyAvailability @default(AVAILABLE)
 
     landlordId String
     categoryId String
+    landlord   User     @relation(fields: [landlordId], references: [id])
+    category   Category @relation(fields: [categoryId], references: [id])
 
-    landlord User     @relation(fields: [landlordId], references: [id])
-    category Category @relation(fields: [categoryId], references: [id])
+    rentalRequests RentalRequest[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

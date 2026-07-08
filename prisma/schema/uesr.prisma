@@ -8,8 +8,8 @@ model User {
     status     UserStatus @default(ACTIVE)
     profileImg String?
 
-    properties Property[]
-    // rentals    RentalRequest[]
+    properties     Property[]
+    rentalRequests RentalRequest[]
     // reviews    Review[]
 
     createdAt DateTime @default(now())

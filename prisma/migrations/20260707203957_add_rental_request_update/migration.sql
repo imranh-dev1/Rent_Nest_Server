@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "rental_requests" ALTER COLUMN "moveInDate" SET DEFAULT CURRENT_TIMESTAMP;

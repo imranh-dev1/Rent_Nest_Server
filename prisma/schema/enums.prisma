@@ -14,3 +14,12 @@ enum PropertyAvailability {
     AVAILABLE
     UNAVAILABLE
 }
+
+enum RentalStatus {
+    PENDING
+    APPROVED
+    REJECTED
+    ACTIVE
+    COMPLETED
+    CANCELLED
+}
