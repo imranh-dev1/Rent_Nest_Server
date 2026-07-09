@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 const createReviewSchema = z.object({
-    body: z.object({
-        propertyId: z
-            .string()
-            .uuid("Invalid property ID."),
+    params: z.object({
+        propertyId: z.string().uuid("Invalid property ID."),
+    }),
 
+    body: z.object({
         rating: z
             .number({
                 error: "Rating must be a number.",
@@ -45,21 +45,21 @@ const updateReviewSchema = z.object({
     }),
 });
 
-const reviewIdSchema = z.object({
-    params: z.object({
-        id: z.string().uuid("Invalid review ID."),
-    }),
-});
-
 const propertyIdSchema = z.object({
     params: z.object({
         propertyId: z.string().uuid("Invalid property ID."),
     }),
 });
 
+const reviewIdSchema = z.object({
+    params: z.object({
+        id: z.string().uuid("Invalid review ID."),
+    }),
+});
+
 export const reviewValidation = {
     createReviewSchema,
     updateReviewSchema,
-    reviewIdSchema,
     propertyIdSchema,
+    reviewIdSchema,
 };

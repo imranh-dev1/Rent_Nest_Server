@@ -90,7 +90,66 @@ const getPropertyReviews = async (propertyId: string) => {
     return reviews;
 };
 
+const updateReview = async (reviewId: string, tenantId: string, payload: ICreateReview) => {
+    const review = await prisma.review.findUniqueOrThrow({
+        where: {
+            id: reviewId,
+        },
+    });
+
+    if (review.tenantId !== tenantId) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to update this review.");
+    }
+
+    const updatedReview = await prisma.review.update({
+        where: {
+            id: reviewId,
+        },
+        data: payload,
+        include: {
+            tenant: {
+                select: {
+                    id: true,
+                    name: true,
+                    profileImg: true,
+                },
+            },
+            property: {
+                select: {
+                    id: true,
+                    title: true,
+                    city: true,
+                },
+            },
+        },
+    });
+
+    return updatedReview;
+};
+
+const deleteReview = async (reviewId: string, tenantId: string) => {
+    const review = await prisma.review.findUniqueOrThrow({
+        where: {
+            id: reviewId,
+        },
+    });
+
+    if (review.tenantId !== tenantId) {
+        throw new AppError(status.FORBIDDEN, "You are not authorized to delete this review.");
+    }
+
+    await prisma.review.delete({
+        where: {
+            id: reviewId,
+        },
+    });
+
+    return null;
+};
+
 export const reviewService = {
     createReview,
-    getPropertyReviews
+    getPropertyReviews,
+    updateReview,
+    deleteReview
 };

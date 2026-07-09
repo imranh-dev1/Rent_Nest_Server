@@ -10,5 +10,7 @@ const router = Router();
 router.post("/:propertyId", validateRequest(reviewValidation.createReviewSchema), auth(Role.TENANT), reviewController.createReview);
 router.get("/:propertyId", validateRequest(reviewValidation.propertyIdSchema), reviewController.getPropertyReviews);
 router.patch("/:id", auth(Role.TENANT), validateRequest(reviewValidation.updateReviewSchema), reviewController.updateReview);
+router.delete("/:id", auth(Role.TENANT), validateRequest(reviewValidation.reviewIdSchema), reviewController.deleteReview);
+
 
 export const reviewRoute = router;
