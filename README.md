@@ -153,7 +153,9 @@ ADMIN_PASSWORD="admin123"
 
 ---
 
-## 📋 API Endpoints : https://github.com/imranh-dev1/Rent_Nest_Backend/blob/main/Rent_Nest.postman_collection.json
+## 📋 API Endpoints
+
+- **API Documentation Postman:** https://github.com/imranh-dev1/Rent_Nest_Backend/blob/main/Rent_Nest.postman_collection.json
 
 ### Auth
 | Method | Endpoint | Access |
