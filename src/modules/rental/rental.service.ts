@@ -141,7 +141,7 @@ const getLandlordRentalRequests = async (landlordId: string) => {
     const rentalRequests = await prisma.rentalRequest.findMany({
         where: {
             property: {
-                landlordId,
+                landlordId
             },
         },
         include: {
